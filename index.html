@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DAIMI — Films</title>
+
+<style>
+:root{
+  --bg:#0d0d10;
+  --fg:#f4f4f6;
+  --muted:#9a9aa0;
+  --headerH:56px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.contactBox{
+  text-align:center;
+  font-size:14px;
+  line-height:1.9;
+  color:#f4f4f6;
+  letter-spacing:.05em;
+}
+
+.contactBox span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:10px;
+}
+
+.about-lang{
+  font-size:13px;
+  line-height:1.8;
+  color:#e6e6eb;
+  opacity:.95;
+  text-align:left;
+}
+
+.about-lang.en{
+  font-style:italic;
+  color:#bfc2ff;
+}
+
+.about-separator{
+  height:1px;
+  width:100%;
+  background:linear-gradient(to right, transparent, rgba(255,255,255,.25), transparent);
+  margin:26px 0;
+}
+
+/* INTRO */
+#intro{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  transition:opacity 1.2s ease, transform 1.2s ease;
+}
+#intro.hide{
+  opacity:0;
+  transform:scale(1.05);
+  pointer-events:none;
+}
+#intro h1{font-weight:300;letter-spacing:.12em}
+#intro a{margin-top:24px;color:var(--muted);text-decoration:none;letter-spacing:.25em}
+
+/* SITE */
+#site{
+  display:none;
+  opacity:0;
+  transition:opacity 1.2s ease;
+}
+#site.show{opacity:1}
+
+/* HEADER */
+header{
+  position:sticky;
+  top:0;
+  height:var(--headerH);
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  padding:0 18px;
+  background:rgba(13,13,16,.85);
+  backdrop-filter:blur(14px);
+  z-index:20;
+}
+header .left,header .right{
+  font-size:10px;
+  letter-spacing:.25em;
+  color:var(--muted);
+  cursor:pointer;
+}
+header .center{justify-self:center;font-size:11px;letter-spacing:.35em}
+header .right{justify-self:end}
+
+/* HERO VIDEO */
+.hero{
+  height:clamp(360px,70vh,720px);
+  position:relative;
+  overflow:hidden;
+}
+.hero video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:brightness(.65) contrast(1.05);
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.85));
+}
+.hero h3{
+  position:absolute;
+  left:24px;
+  bottom:26px;
+  margin:0;
+  font-size:26px;
+  z-index:2;
+}
+
+/* FILTERS */
+.filters{
+  position:sticky;
+  top:var(--headerH);
+  display:flex;
+  gap:18px;
+  padding:14px 18px;
+  background:rgba(13,13,16,.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.filters span{
+  cursor:pointer;
+  font-size:11px;
+  letter-spacing:.12em;
+  color:var(--muted);
+}
+.filters span.active{color:var(--fg)}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+  padding:18px 18px 90px;
+}
+.card{
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  border-radius:10px;
+}
+.card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+}
+.card .meta{
+  position:absolute;
+  left:14px;
+  bottom:14px;
+}
+.card .meta h4{margin:0 0 4px;font-size:12px;letter-spacing:.25em}
+.card .meta small{font-size:11px;color:rgba(244,244,246,.6)}
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.6),transparent 60%);
+}
+
+/* FOOTER */
+footer{
+  padding:40px 20px;
+  text-align:center;
+  font-size:11px;
+  letter-spacing:.25em;
+  color:var(--muted);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+/* VIDEO MODAL */
+#videoModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.92);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.4s;
+  z-index:50;
+}
+#videoModal.active{opacity:1;pointer-events:auto}
+.player{width:min(900px,90vw);aspect-ratio:16/9;border:0}
+.close{margin-top:10px;text-align:center;font-size:10px;letter-spacing:.25em;color:var(--muted);cursor:pointer}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.92);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:.4s;
+  z-index:60;
+}
+.modal.active{opacity:1;pointer-events:auto}
+.modalBox{
+  background:rgba(20,20,24,.8);
+  border-radius:12px;
+  padding:20px;
+  width:min(500px,90vw);
+  text-align:center;
+
+  max-height:80vh;
+  overflow-y:auto;
+}
+.modalBox::-webkit-scrollbar{
+  width:4px;
+}
+.modalBox::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.25);
+  border-radius:4px;
+}
+
+</style>
+</head>
+
+<body>
+
+<audio id="ambience" loop preload="auto">
+  <source src="intro.wav" type="audio/wav">
+</audio>
+<audio id="whoosh" preload="auto">
+  <source src="space.wav" type="audio/wav">
+</audio>
+
+<div id="intro">
+  <h1>We don’t tell stories. We leave fragments of a dream..</h1>
+  <a href="#" onclick="start(event)">ENTER</a>
+</div>
+
+<div id="site">
+<header>
+  <div class="left" onclick="openAbout()">ABOUT</div>
+  <div class="center">DAIMI</div>
+  <div class="right" onclick="openContact()">CONTACT</div>
+</header>
+
+<div id="contactModal" class="modal" onclick="closeContact()">
+  <div class="modalBox contactBox" onclick="event.stopPropagation()">
+    demireldaimi@gmail.com
+    <span>IG: gorkemdaimiii</span>
+    <div class="close" onclick="closeContact()">CLOSE</div>
+  </div>
+</div>
+
+<section class="hero">
+  <video autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <h3>What you feel matters more than what you see.</h3>
+</section>
+
+<div class="filters">
+  <span class="active" onclick="filterCards('all',this)">ALL</span>
+  <span onclick="filterCards('ad',this)">COMMERCIAL FILMS</span>
+  <span onclick="filterCards('short',this)">SHORT FILMS</span>
+    <span onclick="filterCards('doc',this)">DOCUMENTARIES</span>
+</div>
+
+<section class="grid">
+  <div class="card ad" onclick="openVideo('https://vimeo.com/1129592803')">
+    <img src="coffy.png">
+    <div class="meta"><h4>Coffy</h4><small>Commercial Film</small></div>
+  </div>
+  <div class="card ad" onclick="openVideo('https://vimeo.com/1141770285')">
+    <img src="spoti.JPG">
+    <div class="meta"><h4>Spotify Jam</h4><small>Commercial Film</small></div>
+  </div>
+  <div class="card short" onclick="openVideo('https://youtu.be/mRTfiFjcBQg')">
+    <img src="yna.png">
+    <div class="meta"><h4>Ayna</h4><small>Short Film</small></div>
+  </div>
+  <div class="card doc" onclick="openVideo('https://youtu.be/qXIEF--9SSA')">
+    <img src="ciplaks.JPG">
+    <div class="meta"><h4>Çıplak</h4><small>Documentary</small></div>
+  </div>
+</section>
+
+<footer>© 2026 DAIMI — All stories deserve silence.</footer>
+</div>
+
+<div id="videoModal" onclick="closeVideo()">
+  <div onclick="event.stopPropagation()">
+    <iframe id="vimeoPlayer" class="player" allow="autoplay; fullscreen"></iframe>
+    <div class="close" onclick="closeVideo()">CLOSE</div>
+  </div>
+</div>
+
+<div id="aboutModal" class="modal" onclick="closeAbout()">
+  <div class="modalBox" onclick="event.stopPropagation()">
+
+    <div class="about-lang en">
+    (EN)
+      I'm shooting a film today. But I'm actually archiving tomorrow.<br><br>
+
+      I want to create work that, when we look back one day,
+      will make people ask, “Who felt this first?”<br><br>
+
+      I'm Daimii. I make commercials, shoot short films,
+      and experiment with new visual languages using artificial intelligence.
+      But my real focus isn't technology — it's people.<br><br>
+
+      When I founded Daimi Company, I didn't envision an agency.
+      I envisioned a future workshop.
+      A place where feeling, artificial intelligence, and cinema sit at the same table.<br><br>
+
+      Untamed, Mirror, Naked… These aren't a portfolio.
+      They're trailers for a world to come.<br><br>
+
+      For me, the camera isn't a machine.
+      It's a message from within time.<br><br>
+
+      If one day you look at my work and say,
+      “This kid sensed the future,” —
+      that's exactly why I'm here.
+    </div>
+
+    <div class="about-separator"></div>
+
+    <div class="about-lang tr">
+    (TR)
+      Ben bugün film çekiyorum. Ama aslında yarını arşivliyorum.<br><br>
+
+      Bir gün geriye dönüp baktığımızda
+      “bunu kim hissetti ilk?” diye sorulacak işler üretmek istiyorum.<br><br>
+
+      Ben daimii. Reklam filmi yapıyorum, kısa filmler çekiyorum,
+      yapay zekâyla yeni görsel diller deniyorum.
+      Ama asıl meselem teknoloji değil — insan.<br><br>
+
+      Daimi Company’yi kurarken bir ajans hayal etmedim.
+      Bir gelecek atölyesi hayal ettim.
+      Hissin, yapay zekânın ve sinemanın aynı masaya oturduğu bir yer.<br><br>
+
+      Untamed, Ayna, Çıplak… Bunlar portföy değil.
+      Yaklaşan bir dünyanın fragmanları.<br><br>
+
+      Benim için kamera bir makine değil.
+      Zamanın içinden bir mesaj.<br><br>
+
+      Eğer bir gün işlerime bakıp
+      “bu çocuk geleceği sezmiş” dersen —
+      tam olarak bunun için buradayım.
+    </div>
+
+    <div class="close" onclick="closeAbout()">CLOSE</div>
+  </div>
+</div>
+
+<script>
+let aboutModal, contactModal, modal, player, ambience, whoosh;
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  ambience = document.getElementById("ambience");
+  whoosh = document.getElementById("whoosh");
+  aboutModal = document.getElementById("aboutModal");
+  contactModal = document.getElementById("contactModal");
+  modal = document.getElementById("videoModal");
+  player = document.getElementById("vimeoPlayer");
+
+  window.addEventListener("click",()=>{
+    ambience.volume=0.15;
+    ambience.play().catch(()=>{});
+  },{once:true});
+
+});
+
+function start(e){
+  e.preventDefault();
+  whoosh.volume=0.6;
+  whoosh.currentTime=0;
+  whoosh.play();
+  document.getElementById("intro").classList.add("hide");
+  setTimeout(()=>{
+    ambience.pause();
+    document.getElementById("intro").style.display="none";
+    const site=document.getElementById("site");
+    site.style.display="block";
+    setTimeout(()=>site.classList.add("show"),50);
+  },1200);
+}
+
+function filterCards(type,el){
+  document.querySelectorAll(".filters span").forEach(s=>s.classList.remove("active"));
+  el.classList.add("active");
+  document.querySelectorAll(".card").forEach(c=>{
+    c.style.display=(type==="all"||c.classList.contains(type))?"block":"none";
+  });
+}
+
+function openVideo(url){
+  player.src=url+"?autoplay=1";
+  modal.classList.add("active");
+}
+function closeVideo(){
+  modal.classList.remove("active");
+  player.src="";
+}
+
+function openAbout(){ aboutModal.classList.add("active"); }
+function closeAbout(){ aboutModal.classList.remove("active"); }
+
+function openContact(){ contactModal.classList.add("active"); }
+function closeContact(){ contactModal.classList.remove("active"); }
+</script>
+
+
+</body>
+</html>
