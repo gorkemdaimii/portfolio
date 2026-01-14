@@ -13,21 +13,7 @@
   --headerH:56px;
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--fg);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-/* CONTACT */
-.contactBox{text-align:center;font-size:14px;line-height:1.9;color:#f4f4f6;letter-spacing:.05em}
-.contactBox span{display:block;color:var(--muted);font-size:11px;margin-top:10px}
-
-/* ABOUT */
-.about-lang{font-size:13px;line-height:1.8;color:#e6e6eb;opacity:.95;text-align:left}
-.about-lang.en{font-style:italic;color:#bfc2ff}
-.about-separator{height:1px;width:100%;background:linear-gradient(to right, transparent, rgba(255,255,255,.25), transparent);margin:26px 0}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 
 /* INTRO */
 #intro{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;transition:opacity 1.2s ease, transform 1.2s ease}
@@ -45,23 +31,16 @@ header .left,header .right{font-size:10px;letter-spacing:.25em;color:var(--muted
 header .center{justify-self:center;font-size:11px;letter-spacing:.35em}
 header .right{justify-self:end}
 
-/* HERO */
-.hero{height:clamp(360px,70vh,720px);position:relative;overflow:hidden}
-.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.65) contrast(1.05)}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.85))}
-.hero h3{position:absolute;left:24px;bottom:26px;margin:0;font-size:26px;z-index:2}
-
 /* GRID */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;padding:18px 18px 90px}
 .card{cursor:pointer;position:relative;overflow:hidden;border-radius:10px}
 .card img{width:100%;aspect-ratio:2/3;object-fit:cover}
-.card .meta{position:absolute;left:14px;bottom:14px}
 .card::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),transparent 60%)}
 
 /* MODAL */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.4s;z-index:60}
 .modal.active{opacity:1;pointer-events:auto}
-.modalBox{background:rgba(20,20,24,.8);border-radius:12px;padding:20px;width:min(500px,90vw);max-height:80vh;overflow-y:auto}
+.modalBox{background:rgba(20,20,24,.8);border-radius:12px;padding:20px;width:min(500px,90vw)}
 .close{margin-top:10px;text-align:center;font-size:10px;letter-spacing:.25em;color:var(--muted);cursor:pointer}
 </style>
 </head>
@@ -82,36 +61,54 @@ header .right{justify-self:end}
 
 <section class="grid">
   <div class="card" onclick="goToProject('https://vimeo.com/1129592803')"><img src="coffy.png"></div>
-  <div class="card" onclick="goToProject('https://vimeo.com/11417702855')"><img src="spoti.JPG"></div>
-  <div class="card" onclick="goToProject('https://youtu.be/mRTfiFjcBQg?si=lS_DEfeA1JyRfyDf')"><img src="yna.png"></div>
-  <div class="card" onclick="goToProject('https://youtu.be/qXIEF--9SSA?si=Npe4zMA_z0pSJ55f')"><img src="ciplaks.JPG"></div>
+  <div class="card" onclick="goToProject('https://vimeo.com/1141770285')"><img src="spoti.JPG"></div>
+  <div class="card" onclick="goToProject('https://youtu.be/mRTfiFjcBQg')"><img src="yna.png"></div>
+  <div class="card" onclick="goToProject('https://youtu.be/qXIEF--9SSA')"><img src="ciplaks.JPG"></div>
 </section>
 </div>
 
 <div id="aboutModal" class="modal" onclick="closeAbout()">
   <div class="modalBox" onclick="event.stopPropagation()">
-    <div class="about-lang en">I'm shooting a film today. But I'm actually archiving tomorrow.</div>
-    <div class="about-separator"></div>
-    <div class="about-lang tr">Ben bugün film çekiyorum. Ama aslında yarını arşivliyorum.</div>
+    I'm shooting a film today. But I'm actually archiving tomorrow.
     <div class="close" onclick="closeAbout()">CLOSE</div>
   </div>
 </div>
 
 <div id="contactModal" class="modal" onclick="closeContact()">
-  <div class="modalBox contactBox" onclick="event.stopPropagation()">
-    demireldaimi@gmail.com
-    <span>IG: gorkemdaimiii</span>
+  <div class="modalBox" onclick="event.stopPropagation()">
+    demireldaimi@gmail.com<br>IG: gorkemdaimiii
     <div class="close" onclick="closeContact()">CLOSE</div>
   </div>
 </div>
 
 <script>
 let aboutModal, contactModal;
+
 document.addEventListener("DOMContentLoaded",()=>{
   aboutModal=document.getElementById("aboutModal");
   contactModal=document.getElementById("contactModal");
+
+  if(localStorage.getItem("introPassed")==="true"){
+    document.getElementById("intro").style.display="none";
+    const site=document.getElementById("site");
+    site.style.display="block";
+    site.classList.add("show");
+  }
 });
-function start(e){e.preventDefault();document.getElementById("intro").style.display="none";document.getElementById("site").style.display="block"}
+
+function start(e){
+  e.preventDefault();
+  localStorage.setItem("introPassed","true");
+  const intro=document.getElementById("intro");
+  const site=document.getElementById("site");
+  intro.classList.add("hide");
+  setTimeout(()=>{
+    intro.style.display="none";
+    site.style.display="block";
+    setTimeout(()=>site.classList.add("show"),50);
+  },1200);
+}
+
 function openAbout(){aboutModal.classList.add("active")}
 function closeAbout(){aboutModal.classList.remove("active")}
 function openContact(){contactModal.classList.add("active")}
