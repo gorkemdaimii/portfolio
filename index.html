@@ -39,11 +39,7 @@ body{
 #intro a{margin-top:24px;color:var(--muted);text-decoration:none;letter-spacing:.25em}
 
 /* SITE */
-#site{
-  display:none;
-  opacity:0;
-  transition:opacity 1.2s ease;
-}
+#site{display:none;opacity:0;transition:opacity 1.2s ease}
 #site.show{opacity:1}
 
 /* HEADER */
@@ -122,6 +118,13 @@ footer{
   border-radius:12px;
   padding:20px;
   width:min(500px,90vw);
+  max-height:80vh;
+  overflow-y:auto;
+}
+.modalBox::-webkit-scrollbar{width:4px}
+.modalBox::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.25);
+  border-radius:4px;
 }
 .close{
   margin-top:10px;
@@ -131,6 +134,15 @@ footer{
   color:var(--muted);
   cursor:pointer;
 }
+
+/* ABOUT TEXT */
+.about-lang{font-size:13px;line-height:1.8;color:#e6e6eb;opacity:.95;text-align:left}
+.about-lang.en{font-style:italic;color:#bfc2ff}
+.about-separator{height:1px;width:100%;background:linear-gradient(to right, transparent, rgba(255,255,255,.25), transparent);margin:26px 0}
+
+/* CONTACT */
+.contactBox{text-align:center;font-size:14px;line-height:1.9;color:#f4f4f6;letter-spacing:.05em}
+.contactBox span{display:block;color:var(--muted);font-size:11px;margin-top:10px}
 </style>
 </head>
 
@@ -163,24 +175,18 @@ footer{
 
     <div class="about-lang en">
       I'm shooting a film today. But I'm actually archiving tomorrow.<br><br>
-
       I want to create work that, when we look back one day,
       will make people ask, “Who felt this first?”<br><br>
-
       I'm Daimii. I make commercials, shoot short films,
       and experiment with new visual languages using artificial intelligence.
       But my real focus isn't technology — it's people.<br><br>
-
       When I founded Daimi Company, I didn't envision an agency.
       I envisioned a future workshop.
       A place where feeling, artificial intelligence, and cinema sit at the same table.<br><br>
-
       Untamed, Mirror, Naked… These aren't a portfolio.
       They're trailers for a world to come.<br><br>
-
       For me, the camera isn't a machine.
       It's a message from within time.<br><br>
-
       If one day you look at my work and say,
       “This kid sensed the future,” —
       that's exactly why I'm here.
@@ -190,24 +196,18 @@ footer{
 
     <div class="about-lang tr">
       Ben bugün film çekiyorum. Ama aslında yarını arşivliyorum.<br><br>
-
       Bir gün geriye dönüp baktığımızda
       “bunu kim hissetti ilk?” diye sorulacak işler üretmek istiyorum.<br><br>
-
       Ben daimii. Reklam filmi yapıyorum, kısa filmler çekiyorum,
       yapay zekâyla yeni görsel diller deniyorum.
       Ama asıl meselem teknoloji değil — insan.<br><br>
-
       Daimi Company’yi kurarken bir ajans hayal etmedim.
       Bir gelecek atölyesi hayal ettim.
       Hissin, yapay zekânın ve sinemanın aynı masaya oturduğu bir yer.<br><br>
-
       Untamed, Ayna, Çıplak… Bunlar portföy değil.
       Yaklaşan bir dünyanın fragmanları.<br><br>
-
       Benim için kamera bir makine değil.
       Zamanın içinden bir mesaj.<br><br>
-
       Eğer bir gün işlerime bakıp
       “bu çocuk geleceği sezmiş” dersen —
       tam olarak bunun için buradayım.
@@ -217,6 +217,13 @@ footer{
   </div>
 </div>
 
+<div id="contactModal" class="modal" onclick="closeContact()">
+  <div class="modalBox contactBox" onclick="event.stopPropagation()">
+    demireldaimi@gmail.com
+    <span>IG: gorkemdaimiii</span>
+    <div class="close" onclick="closeContact()">CLOSE</div>
+  </div>
+</div>
 
 <script>
 let aboutModal, contactModal;
