@@ -43,8 +43,9 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,Bli
   inset:0;
   background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.85));
 }
-#intro h1{font-weight:300;letter-spacing:.12em;z-index:1}
-#intro a{margin-top:24px;color:var(--muted);text-decoration:none;letter-spacing:.25em;z-index:1}
+#intro h1,#intro a{z-index:1}
+#intro h1{font-weight:300;letter-spacing:.12em}
+#intro a{margin-top:24px;color:var(--muted);text-decoration:none;letter-spacing:.25em}
 
 /* SITE */
 #site{display:none;opacity:0;transition:opacity 1.2s ease}
@@ -55,6 +56,35 @@ header{position:sticky;top:0;height:var(--headerH);display:grid;grid-template-co
 header .left,header .right{font-size:10px;letter-spacing:.25em;color:var(--muted);cursor:pointer}
 header .center{justify-self:center;font-size:11px;letter-spacing:.35em}
 header .right{justify-self:end}
+
+/* HERO VIDEO */
+.hero{
+  height:clamp(360px,70vh,720px);
+  position:relative;
+  overflow:hidden;
+}
+.hero video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:brightness(.65) contrast(1.05);
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.85));
+}
+.hero h3{
+  position:absolute;
+  left:24px;
+  bottom:26px;
+  margin:0;
+  font-size:26px;
+  z-index:2;
+}
 
 /* GRID */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;padding:18px 18px 90px}
@@ -107,6 +137,13 @@ footer{padding:40px 20px;text-align:center;font-size:11px;letter-spacing:.25em;c
   <div class="center">DAIMI</div>
   <div class="right" onclick="openContact()">CONTACT</div>
 </header>
+
+<section class="hero">
+  <video autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <h3>What you feel matters more than what you see.</h3>
+</section>
 
 <section class="grid">
   <div class="card" onclick="goToProject('https://vimeo.com/1129592803')"><img src="coffy.png"></div>
